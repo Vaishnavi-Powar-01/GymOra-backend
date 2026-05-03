@@ -72,10 +72,7 @@ router.post("/", async (req, res) => {
       const user = await User.findById(userId);
       finalEmail = user?.email;
     }
-
-    console.log("📧 Final Email:", finalEmail);
-
-    // 👉 Send email (ONLY HERE)
+    
     if (finalEmail) {
       await sendEmail({
         to: finalEmail,
