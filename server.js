@@ -11,7 +11,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://gym-ora-frontend.vercel.app/'],
+  origin: ['https://gym-ora-frontend.vercel.app'],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
