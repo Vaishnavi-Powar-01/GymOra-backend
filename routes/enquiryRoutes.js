@@ -73,56 +73,71 @@ router.post("/", async (req, res) => {
       finalEmail = user?.email;
     }
     
-    if (finalEmail) {
-      await sendEmail({
-        to: finalEmail,
-        subject: "GymOra – Enquiry Received",
-        html: `
-          <div style="font-family: Arial, sans-serif">
+// ✅ Send email safely
+if (finalEmail) {
 
-            <h2>Thank You for Your Enquiry 💪</h2>
+  try {
 
-            <p>Hello <strong>${name}</strong>,</p>
+    await sendEmail({
+      to: finalEmail,
+      subject: "GymOra – Enquiry Received",
+      html: `
+        <div style="font-family: Arial, sans-serif">
 
-            <p>Your enquiry has been successfully received.</p>
-            <p>We will contact you shortly.</p>
+          <h2>Thank You for Your Enquiry 💪</h2>
 
-            <hr/>
+          <p>Hello <strong>${name}</strong>,</p>
 
-            <h3>Your Details</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>City:</strong> ${city}</p>
-            <p><strong>Enquiry Type:</strong> ${enquiryType}</p>
+          <p>Your enquiry has been successfully received.</p>
+          <p>We will contact you shortly.</p>
 
-            <hr/>
+          <hr/>
 
-            <h3>Selected Products</h3>
-            <ul>
-              ${updatedProducts
-                .map(
-                  (p) =>
-                    `<li>${p.name} × ${p.quantity} = ₹${
-                      p.price * p.quantity
-                    }</li>`
-                )
-                .join("")}
-            </ul>
+          <h3>Your Details</h3>
 
-            <h3>Total Amount: ₹${totalAmount}</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>City:</strong> ${city}</p>
+          <p><strong>Enquiry Type:</strong> ${enquiryType}</p>
 
-            <br/>
+          <hr/>
 
-            <strong>— Team GymOra</strong>
+          <h3>Selected Products</h3>
 
-          </div>
-        `,
-      });
+          <ul>
+            ${updatedProducts
+              .map(
+                (p) =>
+                  `<li>${p.name} × ${p.quantity} = ₹${
+                    p.price * p.quantity
+                  }</li>`
+              )
+              .join("")}
+          </ul>
 
-      console.log("📧 Email sent successfully");
-    } else {
-      console.log("❌ No email found to send");
-    }
+          <h3>Total Amount: ₹${totalAmount}</h3>
+
+          <br/>
+
+          <strong>— Team GymOra</strong>
+
+        </div>
+      `,
+    });
+
+    console.log("📧 Email sent successfully");
+
+  } catch (emailError) {
+
+    console.error("❌ Email failed:", emailError.message);
+
+  }
+
+} else {
+
+  console.log("❌ No email found");
+
+}
 
     res.status(201).json({
       success: true,
