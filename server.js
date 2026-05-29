@@ -11,7 +11,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://gym-ora-frontend.vercel.app'],
+  origin: ['http://localhost:3000','http://localhost:3001'],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
@@ -20,7 +20,6 @@ app.use(cors({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 // Serve static files
 app.use("/api/uploads", express.static('uploads'));
 console.log("EMAIL USER:", process.env.EMAIL_USER);
@@ -46,10 +45,10 @@ app.get("/", (req, res) => {
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/irontribe";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/gymora";
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Atlas connected");
     app.listen(PORT, () => {

@@ -125,6 +125,16 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Failed to get products" });
   }
 });
+router.get("/slug/:slug", async (req, res) => {
+  try {
+    const product = await ProductModel.findOne({ slug: req.params.slug }).populate("category");
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    res.json(product);
+  } catch (error) {
+    console.error("GET product by slug error:", error);
+    res.status(500).json({ error: "Failed to get product" });
+  }
+});
 
 // ✅ GET single product by ID - THIS WAS MISSING!
 router.get("/:id", async (req, res) => {
@@ -141,16 +151,16 @@ router.get("/:id", async (req, res) => {
 });
 
 // ✅ GET product by slug (for product detail page)
-router.get("/slug/:slug", async (req, res) => {
-  try {
-    const product = await ProductModel.findOne({ slug: req.params.slug }).populate("category");
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    res.json(product);
-  } catch (error) {
-    console.error("GET product by slug error:", error);
-    res.status(500).json({ error: "Failed to get product" });
-  }
-});
+// router.get("/slug/:slug", async (req, res) => {
+//   try {
+//     const product = await ProductModel.findOne({ slug: req.params.slug }).populate("category");
+//     if (!product) return res.status(404).json({ error: "Product not found" });
+//     res.json(product);
+//   } catch (error) {
+//     console.error("GET product by slug error:", error);
+//     res.status(500).json({ error: "Failed to get product" });
+//   }
+// });
 
 // ✅ GET products by category slug
 router.get("/categories/:slug", async (req, res) => {
